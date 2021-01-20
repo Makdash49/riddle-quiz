@@ -11,40 +11,21 @@
         ; (println "body:" (:body api-response))
         (println "\nsetup:" (get-in api-response [:body :setup]))
         (println "punchline:" (get-in api-response [:body :punchline]))
-        (println "click-count:" click-count)
         (reset! click-count (get-in api-response [:body :setup]))
-        ))
-        )
+        (println "click-count:" click-count))))
 
 (defn click-counter [click-count]
   [:div
-   "The atom " [:code "click-count"] " has value: "
-   [:p @click-count ". "]
    [:input {:type "button" :value "Click me!"
-            :on-click #(api-call click-count)}]])
+            :on-click #(api-call click-count)}]
+   [:p @click-count]
 
-; (defn click-counter [click-count]
-;   [:div
-;    "The atom " [:code "click-count"] " has value: "
-;    [:p @click-count ". "]
-;    [:input {:type "button" :value "Click me!"
-;             :on-click #(reset! click-count (api-call))}]])
+            ])
 
-(def click-count (r/atom 0))
+(def click-count (r/atom ""))
 
 (defn hello []
   [:<>
-   [:p "Hello, my-shadow-app is running!"]
-   [:p "Here's an example of using a component with state:"]
+   [:p "RANDOM JOKES!"]
    [click-counter click-count]
-   ; [api-call]
 ])
-
-; (defn click-counter [click-count]
-;   [:div
-;    "The atom " [:code "click-count"] " has value: "
-;    @click-count ". "
-;    [:input {:type "button" :value "Click me!"
-;             :on-click #(swap! click-count inc)}]])
-;
-; (def click-count (r/atom 0))
