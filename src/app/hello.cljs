@@ -11,16 +11,15 @@
         ; (println "body:" (:body api-response))
         (println "\nsetup:" (get-in api-response [:body :setup]))
         (println "punchline:" (get-in api-response [:body :punchline]))
-        (reset! click-count (get-in api-response [:body :setup]))
+        (reset! click-count (get-in api-response [:body]))
         (println "click-count:" click-count))))
 
 (defn click-counter [click-count]
   [:div
    [:input {:type "button" :value "Click me!"
             :on-click #(api-call click-count)}]
-   [:p @click-count]
-
-            ])
+   [:p (get @click-count :setup)]
+   [:p (get @click-count :punchline)]])
 
 (def click-count (r/atom ""))
 
