@@ -4,27 +4,21 @@
             [cljs.core.async :refer [<!]])
   (:require [reagent.core :as r]))
 
-(defn api-call [click-count]
+(defn api-call [joke-map]
   (go
     (let [api-response (<! (http/get "https://official-joke-api.appspot.com/random_joke" {:with-credentials? false}))]
-        ; (println "api-response:" api-response)
-        ; (println "body:" (:body api-response))
-        (println "\nsetup:" (get-in api-response [:body :setup]))
-        (println "punchline:" (get-in api-response [:body :punchline]))
-        (reset! click-count (get-in api-response [:body]))
-        (println "click-count:" click-count))))
+      (reset! joke-map (get-in api-response [:body])))))
 
-(defn click-counter [click-count]
+(defn joke-display [joke-map]
   [:div
-   [:input {:type "button" :value "Click me!"
-            :on-click #(api-call click-count)}]
-   [:p (get @click-count :setup)]
-   [:p (get @click-count :punchline)]])
+    [:input {:type "button" :value "Click me!"
+            :on-click #(api-call joke-map)}]
+    [:p (get @joke-map :setup)]
+    [:p (get @joke-map :punchline)]])
 
-(def click-count (r/atom ""))
+(def joke-map (r/atom {}))
 
 (defn hello []
   [:<>
-   [:p "RANDOM JOKES!"]
-   [click-counter click-count]
-])
+    [:p "RANDOM JOKES!"]
+    [joke-display joke-map]])
