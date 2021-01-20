@@ -7,14 +7,29 @@
 (defn api-call [joke-map]
   (go
     (let [api-response (<! (http/get "https://official-joke-api.appspot.com/random_joke" {:with-credentials? false}))]
-      (reset! joke-map (get-in api-response [:body])))))
+      (swap! joke-map assoc (get-in api-response [:body :id]) (get-in api-response [:body]))
+      (println "joke-map:" joke-map)
+
+      )))
+
+(defn first-joke [joke-map]
+  (let [map-keys   (map key joke-map)
+        first-key  (first map-keys)
+        first-joke (joke-map first-key)
+        ]
+  (prn "map-keys: " map-keys)
+  (prn "first-key:" first-key)
+  (println "first-joke:" first-joke)
+  ))
 
 (defn joke-display [joke-map]
   [:div
     [:input {:type "button" :value "Click me!"
             :on-click #(api-call joke-map)}]
-    [:p (@joke-map :setup)]
-    [:p (@joke-map :punchline)]])
+    [first-joke @joke-map]
+
+
+    ])
 
 (def joke-map (r/atom {}))
 
@@ -22,4 +37,5 @@
   [:<>
     [:p "RANDOM JOKES!"]
     [joke-display joke-map]])
-    
+
+    6573
