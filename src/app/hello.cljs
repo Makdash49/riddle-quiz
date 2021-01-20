@@ -5,12 +5,13 @@
   (:require [reagent.core :as r]))
 
 (defn api-call [joke-map]
-  (go
-    (let [api-response (<! (http/get "https://official-joke-api.appspot.com/random_joke" {:with-credentials? false}))]
-      (swap! joke-map assoc (get-in api-response [:body :id]) (get-in api-response [:body]))
-      (println "joke-map:" joke-map)
-
-      )))
+  (reset! joke-map {})
+  (loop [x 0]
+    (when (< x 4)
+    (go
+      (let [api-response (<! (http/get "https://official-joke-api.appspot.com/random_joke" {:with-credentials? false}))]
+        (swap! joke-map assoc (get-in api-response [:body :id]) (get-in api-response [:body]))))
+      (recur (inc x)))))
 
 (defn first-joke [joke-map]
   (let [map-keys   (map key joke-map)
@@ -24,16 +25,17 @@
   ))
 
 (defn lister [items]
-  [:ul
-  (for [item items]
-   ^{:key item} [:li (:punchline item)])])
+  (when (> (count items) 3)
+    [:ul
+      (for [item items]
+      ^{:key item} [:li (:punchline item)])]))
 
 (defn joke-display [joke-map]
   [:div
     [:input {:type "button" :value "Click me!"
             :on-click #(api-call joke-map)}]
     [:p (:setup (first-joke @joke-map))]
-    [lister (shuffle (map val @joke-map))]])
+      [lister (shuffle (map val @joke-map))]])
 
 (def joke-map (r/atom {}))
 
@@ -41,3 +43,4 @@
   [:<>
     [:p "RANDOM JOKES!"]
     [joke-display joke-map]])
+    
