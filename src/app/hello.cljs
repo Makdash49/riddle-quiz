@@ -13,8 +13,8 @@
   [:div
     [:input {:type "button" :value "Click me!"
             :on-click #(api-call joke-map)}]
-    [:p (get @joke-map :setup)]
-    [:p (get @joke-map :punchline)]])
+    [:p (@joke-map :setup)]
+    [:p (@joke-map :punchline)]])
 
 (def joke-map (r/atom {}))
 
