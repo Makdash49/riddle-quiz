@@ -23,13 +23,17 @@
   first-joke
   ))
 
+(defn lister [items]
+  [:ul
+  (for [item items]
+   ^{:key item} [:li (:punchline item)])])
+
 (defn joke-display [joke-map]
   [:div
     [:input {:type "button" :value "Click me!"
             :on-click #(api-call joke-map)}]
     [:p (:setup (first-joke @joke-map))]
-    [:p (:punchline (first-joke @joke-map))]])
-
+    [lister (shuffle (map val @joke-map))]])
 
 (def joke-map (r/atom {}))
 
