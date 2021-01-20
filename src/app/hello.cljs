@@ -7,13 +7,10 @@
 (defn api-call []
   (go
     (let [api-response (<! (http/get "https://official-joke-api.appspot.com/random_joke" {:with-credentials? false}))]
-        (println "api-response:" api-response)
-        (println "body:" (:body api-response))
-        (println "setup:" (get-in api-response [:body :setup]))
+        ; (println "api-response:" api-response)
+        ; (println "body:" (:body api-response))
+        (println "\nsetup:" (get-in api-response [:body :setup]))
         (println "punchline:" (get-in api-response [:body :punchline]))
-
-        ; (get-in api-response [:body :setup])
-
         )) nil )
 
 (defn click-counter [click-count]
