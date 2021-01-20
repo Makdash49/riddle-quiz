@@ -20,16 +20,16 @@
   (prn "map-keys: " map-keys)
   (prn "first-key:" first-key)
   (println "first-joke:" first-joke)
+  first-joke
   ))
 
 (defn joke-display [joke-map]
   [:div
     [:input {:type "button" :value "Click me!"
             :on-click #(api-call joke-map)}]
-    [first-joke @joke-map]
+    [:p (:setup (first-joke @joke-map))]
+    [:p (:punchline (first-joke @joke-map))]])
 
-
-    ])
 
 (def joke-map (r/atom {}))
 
@@ -37,5 +37,3 @@
   [:<>
     [:p "RANDOM JOKES!"]
     [joke-display joke-map]])
-
-    6573
