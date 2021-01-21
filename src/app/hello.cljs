@@ -10,7 +10,7 @@
     (when (< x 4)
     (go
       (let [api-response (<! (http/get "https://official-joke-api.appspot.com/random_joke" {:with-credentials? false}))]
-        (swap! joke-map assoc (get-in api-response [:body :id]) (get-in api-response [:body]))))
+        (swap! joke-map assoc-in [:jokes (get-in api-response [:body :id])] (get-in api-response [:body]))))
       (recur (inc x)))))
 
 (defn first-joke [joke-map]
@@ -36,7 +36,9 @@
     [:input {:type "button" :value "Click me!"
             :on-click #(api-call joke-map)}]
     [:p (:setup (first-joke @joke-map))]
-      [lister (shuffle (map val @joke-map))]])
+    [:p "Is this your letter? " (:letter @joke-map)]
+       [lister (shuffle (map val (@joke-map :jokes)))]
+      ])
 
 (def joke-map (r/atom {}))
 
