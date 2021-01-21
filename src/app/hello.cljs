@@ -18,6 +18,7 @@
         first-key  (first map-keys)
         first-joke (joke-map first-key)
         ]
+  (prn "joke-map:" joke-map)
   (prn "map-keys: " map-keys)
   (prn "first-key:" first-key)
   (println "first-joke:" first-joke)
@@ -39,8 +40,11 @@
 
 (def joke-map (r/atom {}))
 
+  (defn handler [e] (println "This is e: " (.-key e))
+   (swap! joke-map assoc :letter (.-key e)))
+
 (defn hello []
+    (js/document.addEventListener "keypress" handler)
   [:<>
     [:p "RANDOM JOKES!"]
     [joke-display joke-map]])
-    
