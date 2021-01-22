@@ -21,10 +21,11 @@
       (recur (inc x)))))
 
 (defn lister [items]
-  (when (> (count items) 3)
+  (let [letters ["A" "B" "C" "D"]]
+    (when (> (count items) 3)
     [:ul
-      (for [item items]
-      ^{:key item} [:li (:punchline item)])]))
+    (for [item items]
+      ^{:key item} [:li (nth letters (.indexOf items item)) " " (:punchline item)])])))
 
 (defn letter-display [joke-map]
   [:p "You selected letter: "
