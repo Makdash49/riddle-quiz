@@ -1,12 +1,14 @@
 (ns app.hello
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs-http.client :as http]
-            [cljs.core.async :refer [<!]])
-  (:require [reagent.core :as r]))
+            [cljs.core.async :refer [<!]]
+            [reagent.core :as r]
+            [clojure.string :as str]))
 
 (defn api-call [joke-map]
   (reset! joke-map {})
   (loop [x 0]
+    (println "recur!!!!!")
     (when (< x 4)
     (go
       (let [api-response (<! (http/get "https://official-joke-api.appspot.com/random_joke" {:with-credentials? false}))]
@@ -32,7 +34,9 @@
       ^{:key item} [:li (:punchline item)])]))
 
 (defn letter-display [joke-map]
-  [:p "You selected letter: " (:letter @joke-map)])
+  [:p "You selected letter: "
+  (when (:letter @joke-map)
+  (str/upper-case (:letter @joke-map)))])
 
 (defn joke-display [joke-map]
   [:div
