@@ -12,21 +12,13 @@
     (when (< x 4)
     (go
       (let [api-response (<! (http/get "https://official-joke-api.appspot.com/random_joke" {:with-credentials? false}))]
+      ; TODO This can be refactored so that I don't store the jokes twice.
+        (when (= x 0)
+          (swap! joke-map assoc :display-setup-joke (get-in api-response [:body])))
+        ; We may not need this one after you get this working.
         (swap! joke-map assoc-in [:jokes (get-in api-response [:body :id])] (get-in api-response [:body])))
         (swap! joke-map assoc :shuffled-jokes (shuffle (map val (@joke-map :jokes)))))
       (recur (inc x)))))
-
-(defn first-joke [joke-map]
-  (let [map-keys   (map key (joke-map :jokes))
-        first-key  (first map-keys)
-        first-joke (get-in joke-map [:jokes first-key])
-        ]
-  (prn "*joke-map:" joke-map)
-  ; (prn "*map-keys: " map-keys)
-  ; (prn "*first-key:" first-key)
-  ; (println "*first-joke:" first-joke)
-  first-joke
-  ))
 
 (defn lister [items]
   (when (> (count items) 3)
@@ -43,7 +35,7 @@
   [:div
     [:input {:type "button" :value "Click me!"
             :on-click #(api-call joke-map)}]
-    [:p (:setup (first-joke @joke-map))]
+    [:p (:setup (@joke-map :display-setup-joke))]
     ; (println "(map val (@joke-map :jokes)):" (map val (@joke-map :jokes)))
        [lister (@joke-map :shuffled-jokes)]])
 
