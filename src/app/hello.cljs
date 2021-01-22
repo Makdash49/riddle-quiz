@@ -12,7 +12,8 @@
     (when (< x 4)
     (go
       (let [api-response (<! (http/get "https://official-joke-api.appspot.com/random_joke" {:with-credentials? false}))]
-        (swap! joke-map assoc-in [:jokes (get-in api-response [:body :id])] (get-in api-response [:body]))))
+        (swap! joke-map assoc-in [:jokes (get-in api-response [:body :id])] (get-in api-response [:body])))
+        (swap! joke-map assoc :shuffled-jokes (shuffle (map val (@joke-map :jokes)))))
       (recur (inc x)))))
 
 (defn first-joke [joke-map]
@@ -21,9 +22,9 @@
         first-joke (get-in joke-map [:jokes first-key])
         ]
   (prn "*joke-map:" joke-map)
-  (prn "*map-keys: " map-keys)
-  (prn "*first-key:" first-key)
-  (println "*first-joke:" first-joke)
+  ; (prn "*map-keys: " map-keys)
+  ; (prn "*first-key:" first-key)
+  ; (println "*first-joke:" first-joke)
   first-joke
   ))
 
@@ -43,8 +44,8 @@
     [:input {:type "button" :value "Click me!"
             :on-click #(api-call joke-map)}]
     [:p (:setup (first-joke @joke-map))]
-    (println "(map val (@joke-map :jokes)):" (map val (@joke-map :jokes)))
-       [lister (map val (@joke-map :jokes))]])
+    ; (println "(map val (@joke-map :jokes)):" (map val (@joke-map :jokes)))
+       [lister (@joke-map :shuffled-jokes)]])
 
 (def joke-map (r/atom {}))
 
