@@ -17,7 +17,9 @@
           (swap! joke-map assoc :display-setup-joke (get-in api-response [:body])))
         ; We may not need this one after you get this working. No need it.  Only way to get all the data.
         (swap! joke-map assoc-in [:jokes (get-in api-response [:body :id])] (get-in api-response [:body])))
-        (swap! joke-map assoc :shuffled-jokes (shuffle (map val (@joke-map :jokes)))))
+        (swap! joke-map assoc :ordered-jokes (map val (@joke-map :jokes)))
+        (swap! joke-map assoc :shuffled-jokes (shuffle (map val (@joke-map :jokes))))
+        )
       (recur (inc x)))))
 
 (defn lister [items]
@@ -34,10 +36,14 @@
   (:letter @joke-map)]))
 
 (defn joke-display [joke-map]
+  (prn "joke-map: " joke-map)
   [:div
     [:input {:type "button" :value "Click me for a Riddle!"
             :on-click #(api-call joke-map)}]
-    [:p (:setup (@joke-map :display-setup-joke))]
+    ; [:p (:setup (@joke-map :display-setup-joke))]
+    ; (prn "********* Should be first setup:" (get (@joke-map :ordered-jokes) 0 ))
+    (prn "********* Should be first setup:" (nth (@joke-map :ordered-jokes) 0 ))
+    [:p (:setup (nth (@joke-map :ordered-jokes) 0 ))]
     ; (println "(map val (@joke-map :jokes)):" (map val (@joke-map :jokes)))
        [lister (@joke-map :shuffled-jokes)]])
 
@@ -48,16 +54,19 @@
    (swap! joke-map assoc :letter  (str/upper-case (.-key e)  )))
 
 (defn answer [joke-map]
-  (println "for answer - joke-map: " @joke-map)
-  (let [setup-id (get-in @joke-map [:display-setup-joke :id])
+  ; (println "for answer - joke-map: " @joke-map)
+  (prn "&&&&&&&&&&&&&&&&& get that id:" (when (@joke-map :ordered-jokes)((nth (@joke-map :ordered-jokes) 0 ) :id)))
+  ; (let [setup-id (get-in @joke-map [:display-setup-joke :id])
+  (let [setup-id (when (@joke-map :ordered-jokes)((nth (@joke-map :ordered-jokes) 0 ) :id))
+
         selected-letter (@joke-map :letter)
         letters-to-nums {"A" 0 "B" 1 "C" 2 "D" 3}
         joke-index (letters-to-nums (@joke-map :letter))
         selection-id (get-in @joke-map [:shuffled-jokes joke-index :id])]
-        (println "set-up id: " setup-id)
-        (println "selected-letter: " selected-letter)
-        (println "joke-index:" joke-index)
-        (println "selection-id: " selection-id)
+        ; (println "set-up id: " setup-id)
+        ; (println "selected-letter: " selected-letter)
+        ; (println "joke-index:" joke-index)
+        ; (println "selection-id: " selection-id)
         (when (some? selected-letter)
           (if (= setup-id selection-id)
           "YOU GOT IT RIGHT!!!"
@@ -70,3 +79,83 @@
     [joke-display joke-map]
     [letter-display joke-map]
     [answer joke-map]])
+
+
+    ; {
+    ;    :"jokes"{
+    ;       234{
+    ;          :id 234,
+    ;          :"type""general",
+    ;          :"setup""What do you call cheese by itself?",
+    ;          :"punchline""Provolone."
+    ;       },
+    ;       220{
+    ;          :id 220,
+    ;          :"type""general",
+    ;          :"setup""What do you call a group of disorganized cats?",
+    ;          :"punchline""A cat-tastrophe."
+    ;       },
+    ;       183{
+    ;          :id 183,
+    ;          :"type""general",
+    ;          :"setup""What did the Dorito farmer say to the other Dorito farmer?",
+    ;          :"punchline""Cool Ranch!"
+    ;       },
+    ;       325{
+    ;          :id 325,
+    ;          :"type""general",
+    ;          :"setup""Why couldn't the lifeguard save the hippie?",
+    ;          :"punchline""He was too far out, man."
+    ;       }
+    ;    },
+    ;    :"ordered-jokes ("{
+    ;       :id 234,
+    ;       :"type""general",
+    ;       :"setup""What do you call cheese by itself?",
+    ;       :"punchline""Provolone."
+    ;    }{
+    ;       :id 220,
+    ;       :"type""general",
+    ;       :"setup""What do you call a group of disorganized cats?",
+    ;       :"punchline""A cat-tastrophe."
+    ;    }{
+    ;       :id 183,
+    ;       :"type""general",
+    ;       :"setup""What did the Dorito farmer say to the other Dorito farmer?",
+    ;       :"punchline""Cool Ranch!"
+    ;    }{
+    ;       :id 325,
+    ;       :"type""general",
+    ;       :"setup""Why couldn't the lifeguard save the hippie?",
+    ;       :"punchline""He was too far out, man."
+    ;    }")",
+    ;    :"shuffled-jokes"[
+    ;       {
+    ;          :id 234,
+    ;          :"type""general",
+    ;          :"setup""What do you call cheese by itself?",
+    ;          :"punchline""Provolone."
+    ;       }{
+    ;          :id 325,
+    ;          :"type""general",
+    ;          :"setup""Why couldn't the lifeguard save the hippie?",
+    ;          :"punchline""He was too far out, man."
+    ;       }{
+    ;          :id 183,
+    ;          :"type""general",
+    ;          :"setup""What did the Dorito farmer say to the other Dorito farmer?",
+    ;          :"punchline""Cool Ranch!"
+    ;       }{
+    ;          :id 220,
+    ;          :"type""general",
+    ;          :"setup""What do you call a group of disorganized cats?",
+    ;          :"punchline""A cat-tastrophe."
+    ;       }
+    ;    ],
+    ;    :"display-setup-joke"{
+    ;       :id 183,
+    ;       :"type""general",
+    ;       :"setup""What did the Dorito farmer say to the other Dorito farmer?",
+    ;       :"punchline""Cool Ranch!"
+    ;    }
+    ; }
