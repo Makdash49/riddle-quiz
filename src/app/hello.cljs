@@ -15,7 +15,7 @@
       ; TODO This can be refactored so that I don't store the jokes twice.
         (when (= x 0)
           (swap! joke-map assoc :display-setup-joke (get-in api-response [:body])))
-        ; We may not need this one after you get this working.
+        ; We may not need this one after you get this working. No need it.  Only way to get all the data.
         (swap! joke-map assoc-in [:jokes (get-in api-response [:body :id])] (get-in api-response [:body])))
         (swap! joke-map assoc :shuffled-jokes (shuffle (map val (@joke-map :jokes)))))
       (recur (inc x)))))
