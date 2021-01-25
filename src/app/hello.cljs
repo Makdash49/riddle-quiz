@@ -57,6 +57,7 @@
           (if (= setup-id selection-id)
             (do
               (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
+              (swap! joke-map assoc :letter nil)
               "That is Correct!")
             "WRONG!!!"))))
 
