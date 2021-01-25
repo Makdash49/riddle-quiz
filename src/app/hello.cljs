@@ -58,7 +58,7 @@
             (do
               (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
               (swap! joke-map assoc :letter nil)
-              "That is Correct!")
+              "")
             "WRONG!!!"))))
 
 (defn hello []
