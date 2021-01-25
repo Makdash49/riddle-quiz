@@ -13,8 +13,8 @@
     (go
       (let [api-response (<! (http/get "https://official-joke-api.appspot.com/random_joke" {:with-credentials? false}))]
       ; TODO This can be refactored so that I don't store the jokes twice.
-        (when (= x 0)
-          (swap! joke-map assoc :display-setup-joke (get-in api-response [:body])))
+        ; (when (= x 0)
+        ;   (swap! joke-map assoc :display-setup-joke (get-in api-response [:body])))
         ; We may not need this one after you get this working. No need it.  Only way to get all the data.
         (swap! joke-map assoc-in [:jokes (get-in api-response [:body :id])] (get-in api-response [:body])))
         (swap! joke-map assoc :ordered-jokes (map val (@joke-map :jokes)))
@@ -30,7 +30,7 @@
       ^{:key item} [:li "("(nth letters (.indexOf items item)) ")  " (:punchline item)])])))
 
 (defn letter-display [joke-map]
-  (when (:display-setup-joke @joke-map)
+  (when (:shuffled-jokes @joke-map)
   [:p "You typed letter: "
 
   (:letter @joke-map)]))
