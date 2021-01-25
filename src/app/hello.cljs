@@ -84,7 +84,7 @@
   [:<>
     [:p "RIDDLE QUIZ!"]
     [joke-display joke-map]
-    [letter-display joke-map]
+    ; [letter-display joke-map]
     [answer joke-map]
     [wrong-or-right joke-map]])
 
