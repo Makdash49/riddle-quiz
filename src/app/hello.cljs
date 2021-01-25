@@ -64,7 +64,16 @@
                 (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
                 (swap! joke-map assoc :wrong-or-right ""))
                 "")
-            (swap! joke-map assoc :wrong-or-right "Wrong!"))))
+            (do
+              (swap! joke-map assoc :wrong-or-right "Wrong!")
+              (swap! joke-map assoc :letter nil)
+              (go
+                (<! (timeout 1000))
+                  (swap! joke-map assoc :wrong-or-right "")
+
+                "")
+
+              ))))
             "")
 
 (defn wrong-or-right [joke-map]
