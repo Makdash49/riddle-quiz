@@ -55,7 +55,9 @@
         (prn "selection-id: " selection-id)
         (when (some? selected-letter)
           (if (= setup-id selection-id)
-            (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
+            (do
+              (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
+              "That is Correct!")
             "WRONG!!!"))))
 
 (defn hello []
