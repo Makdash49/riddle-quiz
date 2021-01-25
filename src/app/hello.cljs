@@ -3,7 +3,8 @@
   (:require [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
             [reagent.core :as r]
-            [clojure.string :as str]))
+            [clojure.string :as str]
+            [cljs.core.async :refer [<! timeout]]))
 
 (defn api-call [joke-map]
   (reset! joke-map {:joke-counter 0})
@@ -59,7 +60,12 @@
               (swap! joke-map assoc :wrong-or-right "You are Correct!")
               ; Put these in a timout
               (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
-              (swap! joke-map assoc :letter nil))
+              (swap! joke-map assoc :letter nil)
+(go
+                  (<! (timeout 1000))
+                  (swap! joke-map assoc :wrong-or-right ""))
+
+              )
             (swap! joke-map assoc :wrong-or-right "Wrong!"))))
             nil)
 
