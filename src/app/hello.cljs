@@ -6,7 +6,7 @@
             [clojure.string :as str]))
 
 (defn api-call [joke-map]
-  (reset! joke-map {})
+  (reset! joke-map {:joke-counter 0})
   (loop [x 0]
     (when (< x 4)
     (go
@@ -31,29 +31,32 @@
   (:letter @joke-map)]))
 
 (defn joke-display [joke-map]
+  (println "\n\njoke-counter: " (@joke-map :joke-counter))
   (prn "joke-map:" @joke-map)
+
   [:div
     [:input {:type "button" :value "Click me for a Riddle!"
             :on-click #(api-call joke-map)}]
-    [:p (:setup (nth (@joke-map :ordered-jokes) 0 ))]
+    [:p (:setup (nth (@joke-map :ordered-jokes) (@joke-map :joke-counter)))]
        [lister (@joke-map :shuffled-jokes)]])
 
-(def joke-map (r/atom {}))
+(def joke-map (r/atom {:joke-counter 0}))
 
   (defn handler [e]
    (swap! joke-map assoc :letter  (str/upper-case (.-key e)  )))
 
 (defn answer [joke-map]
-  (let [setup-id (when (@joke-map :ordered-jokes)((nth (@joke-map :ordered-jokes) 0 ) :id))
-
+  (let [setup-id (when (@joke-map :ordered-jokes)((nth (@joke-map :ordered-jokes) (@joke-map :joke-counter)) :id))
         selected-letter (@joke-map :letter)
         letters-to-nums {"A" 0 "B" 1 "C" 2 "D" 3}
         joke-index (letters-to-nums (@joke-map :letter))
         selection-id (get-in @joke-map [:shuffled-jokes joke-index :id])]
+        (prn "setup-id:" setup-id)
+        (prn "selection-id: " selection-id)
         (when (some? selected-letter)
           (if (= setup-id selection-id)
-          "YOU GOT IT RIGHT!!!"
-          "WRONG!!!"))))
+            (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
+            "WRONG!!!"))))
 
 (defn hello []
     (js/document.addEventListener "keypress" handler)
