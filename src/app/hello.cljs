@@ -28,13 +28,14 @@
       ^{:key item} [:li "("(nth letters (.indexOf items item)) ")  " (:punchline item)])])))
 
 (defn letter-display [joke-map]
-  [:p "You selected letter: "
-  (when (:letter @joke-map)
-  (:letter @joke-map))])
+  (when (:display-setup-joke @joke-map)
+  [:p "You typed letter: "
+
+  (:letter @joke-map)]))
 
 (defn joke-display [joke-map]
   [:div
-    [:input {:type "button" :value "Click me!"
+    [:input {:type "button" :value "Click me for a Riddle!"
             :on-click #(api-call joke-map)}]
     [:p (:setup (@joke-map :display-setup-joke))]
     ; (println "(map val (@joke-map :jokes)):" (map val (@joke-map :jokes)))
