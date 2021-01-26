@@ -85,7 +85,7 @@
 (defn hello []
   ; Matt K says there may be a way to do this with shadow.cljs
     (js/document.addEventListener "keypress" handler)
-  [:<>
+  [:<> 
     [:link {:rel "stylesheet" :href "/css/style.css"}]
     [:p "RIDDLE QUIZ!"]
     [joke-display joke-map]

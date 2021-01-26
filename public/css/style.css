@@ -1,6 +1,21 @@
-body {
+/* body {
   background-color: lightblue;
+} */
+
+
+/* body {
+  background-image: url("https://i.pinimg.com/originals/39/22/ed/3922ed9211e441286303d7f3bd678aa0.jpg");
+  background-color: #cccccc;
+} */
+
+html {
+  background: url("https://i.pinimg.com/originals/39/22/ed/3922ed9211e441286303d7f3bd678aa0.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
+
 
 h1 {
   color: white;
@@ -10,4 +25,12 @@ h1 {
 p {
   font-family: verdana;
   font-size: 20px;
+}
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
 }
