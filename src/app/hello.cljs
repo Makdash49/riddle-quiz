@@ -29,7 +29,7 @@
   (when (:shuffled-jokes @joke-map)
   [:p "You typed letter: "
 
-  (:letter @joke-map)]))
+  (:temp-letter @joke-map)]))
 
 (defn joke-display [joke-map]
   (println "\n\njoke-counter: " (@joke-map :joke-counter))
@@ -44,7 +44,10 @@
 (def joke-map (r/atom {:joke-counter 0}))
 
   (defn handler [e]
-   (swap! joke-map assoc :letter  (str/upper-case (.-key e)  )))
+   (swap! joke-map assoc :letter  (str/upper-case (.-key e)))
+   (swap! joke-map assoc :temp-letter  (str/upper-case (.-key e)))
+
+   )
 
 (defn answer [joke-map]
   (let [setup-id (when (@joke-map :ordered-jokes)((nth (@joke-map :ordered-jokes) (@joke-map :joke-counter)) :id))
@@ -62,7 +65,8 @@
               (go
                 (<! (timeout 1000))
                 (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
-                (swap! joke-map assoc :wrong-or-right ""))
+                (swap! joke-map assoc :wrong-or-right "")
+                (swap! joke-map assoc :temp-letter nil))
                 "")
             (do
               (swap! joke-map assoc :wrong-or-right "Wrong!")
@@ -70,6 +74,7 @@
               (go
                 (<! (timeout 1000))
                   (swap! joke-map assoc :wrong-or-right "")
+                  (swap! joke-map assoc :temp-letter nil)
 
                 "")
 
@@ -84,7 +89,8 @@
   [:<>
     [:p "RIDDLE QUIZ!"]
     [joke-display joke-map]
-    ; [letter-display joke-map]
+    ; You may be able to show this if you have a temporary letter that is reset later.
+    [letter-display joke-map]
     [answer joke-map]
     [wrong-or-right joke-map]])
 
