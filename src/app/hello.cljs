@@ -14,8 +14,7 @@
       (let [api-response (<! (http/get "https://official-joke-api.appspot.com/random_joke" {:with-credentials? false}))]
         (swap! joke-map assoc-in [:jokes (get-in api-response [:body :id])] (get-in api-response [:body])))
         (swap! joke-map assoc :ordered-jokes (map val (@joke-map :jokes)))
-        (swap! joke-map assoc :shuffled-jokes (shuffle (map val (@joke-map :jokes))))
-        )
+        (swap! joke-map assoc :shuffled-jokes (shuffle (map val (@joke-map :jokes)))))
       (recur (inc x)))))
 
 (defn lister [items]
@@ -27,50 +26,48 @@
 
 (defn letter-display [joke-map]
   (when (:shuffled-jokes @joke-map)
-  [:p "You typed letter: "
-
-  (:temp-letter @joke-map)]))
+  [:p "You typed letter: "(:temp-letter @joke-map)]))
 
 (defn joke-display [joke-map]
-  (println "\n\njoke-counter: " (@joke-map :joke-counter))
   (prn "joke-map:" @joke-map)
-
   [:div
-    [:input {:type "button" :value "Click me for a Riddle!"
+    [:input {:type "button" :value "Click me for Riddles!"
             :on-click #(api-call joke-map)}]
     [:p (:setup (nth (@joke-map :ordered-jokes) (@joke-map :joke-counter)))]
        [lister (@joke-map :shuffled-jokes)]])
 
 (def joke-map (r/atom {:joke-counter 0}))
 
-  (defn handler [e]
+(defn handler [e]
    (swap! joke-map assoc :letter  (str/upper-case (.-key e)))
-   (swap! joke-map assoc :temp-letter  (str/upper-case (.-key e)))
-
-   )
+   (swap! joke-map assoc :temp-letter  (str/upper-case (.-key e))))
 
 (defn answer [joke-map]
+  ; Matt K says break out each condition into its own function.
   (let [setup-id (when (@joke-map :ordered-jokes)((nth (@joke-map :ordered-jokes) (@joke-map :joke-counter)) :id))
         selected-letter (@joke-map :letter)
         letters-to-nums {"A" 0 "B" 1 "C" 2 "D" 3}
         joke-index (letters-to-nums (@joke-map :letter))
         selection-id (get-in @joke-map [:shuffled-jokes joke-index :id])]
-        (prn "setup-id:" setup-id)
-        (prn "selection-id: " selection-id)
         (when (some? selected-letter)
           (if (= setup-id selection-id)
             (do
-              (swap! joke-map assoc :wrong-or-right "You are Correct!")
-              (swap! joke-map assoc :letter nil)
-              (go
-                (<! (timeout 1000))
-                (if (= (@joke-map :joke-counter) 3)
-                  (swap! joke-map assoc :wrong-or-right "Well done! You cleared the riddles! Click for another set!")
-                  (do
-                    (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
-                    (swap! joke-map assoc :wrong-or-right "")
-                    (swap! joke-map assoc :temp-letter nil))))
-                "")
+              (if (< (@joke-map :joke-counter) 3)
+              (do
+                (swap! joke-map assoc :wrong-or-right "You are Correct!")
+                (swap! joke-map assoc :letter nil)
+                (go
+                  (<! (timeout 1000))
+                  (if (= (@joke-map :joke-counter) 3)
+                    (swap! joke-map assoc :wrong-or-right "Well done! You cleared the riddles! Click for another set!")
+                    (do
+                      (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
+                      (swap! joke-map assoc :wrong-or-right "")
+                      (swap! joke-map assoc :temp-letter nil)))))
+             (do
+               (swap! joke-map assoc :wrong-or-right "Well done! You cleared the riddles! Click for another set!")
+               (swap! joke-map assoc :letter nil)))
+               "")
             (do
               (swap! joke-map assoc :wrong-or-right "Wrong!")
               (swap! joke-map assoc :letter nil)
@@ -78,9 +75,7 @@
                 (<! (timeout 1000))
                   (swap! joke-map assoc :wrong-or-right "")
                   (swap! joke-map assoc :temp-letter nil)
-
                 "")
-
               ))))
             "")
 
@@ -88,12 +83,13 @@
   [:p (@joke-map :wrong-or-right)])
 
 (defn hello []
+  ; Matt K says there may be a way to do this with shadow.cljs
     (js/document.addEventListener "keypress" handler)
   [:<>
     [:p "RIDDLE QUIZ!"]
     [joke-display joke-map]
-    ; You may be able to show this if you have a temporary letter that is reset later.
     [letter-display joke-map]
+    ; Does this need to be a component that displays?
     [answer joke-map]
     [wrong-or-right joke-map]])
 
