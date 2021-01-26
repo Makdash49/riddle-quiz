@@ -33,7 +33,7 @@ p {
 .joke-container {
   border-radius: 25px;
   background-color: white;
-  color: gray;
+  color: #505050;
   height: 350px;
   width: 600px;
   padding: 10px 30px;
@@ -41,4 +41,33 @@ p {
 
 li {
    list-style-type: none; /* Remove bullets */
+}
+
+.title {
+  text-align: center;
+  color: purple;
+}
+
+/* input[type=button] {
+  display: block;
+  width: 35%;
+  height: 40px;
+  margin: 0 auto;
+  font-size: 16px;
+  border-radius: 25px;
+} */
+
+.click-here {
+  display: block;
+  width: 35%;
+  height: 40px;
+  margin: 0 auto;
+  font-size: 16px;
+  border-radius: 25px;
+}
+
+
+.click-here:focus {
+  outline: none;
+  box-shadow: 0px 0px 2px #0066ff;
 }

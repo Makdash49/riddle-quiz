@@ -31,7 +31,7 @@
 (defn joke-display [joke-map]
   (prn "joke-map:" @joke-map)
   [:div
-    [:input {:type "button" :value "Click Here for Riddles!"
+    [:input {:type "button" :class "click-here" :value "Click Here for Riddles!"
             :on-click #(api-call joke-map)}]
     [:p (:setup (nth (@joke-map :ordered-jokes) (@joke-map :joke-counter)))]
        [lister (@joke-map :shuffled-jokes)]])
@@ -54,7 +54,7 @@
             (do
               (if (< (@joke-map :joke-counter) 3)
               (do
-                (swap! joke-map assoc :wrong-or-right "You are Correct!")
+                (swap! joke-map assoc :wrong-or-right "You are Correct!!")
                 (swap! joke-map assoc :letter nil)
                 (go
                   (<! (timeout 1000))
@@ -84,11 +84,12 @@
 
 (defn hello []
   ; Matt K says there may be a way to do this with shadow.cljs
+  ; This may be creating many many listeners
     (js/document.addEventListener "keypress" handler)
   [:<>
     [:link {:rel "stylesheet" :href "/css/style.css"}]
     [:div {:class "joke-container centered"}
-      [:p "RIDDLE QUIZ!"]
+      [:p {:class "title"} "RIDDLE QUIZ!"]
       [joke-display joke-map]
       [letter-display joke-map]
       ; Does this need to be a component that displays?
