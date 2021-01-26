@@ -64,9 +64,12 @@
               (swap! joke-map assoc :letter nil)
               (go
                 (<! (timeout 1000))
-                (swap! joke-map assoc :joke-counter (if (< (@joke-map :joke-counter) 3) (inc (@joke-map :joke-counter)) 3 ))
-                (swap! joke-map assoc :wrong-or-right "")
-                (swap! joke-map assoc :temp-letter nil))
+                (if (= (@joke-map :joke-counter) 3)
+                  (api-call joke-map)
+                  (do
+                    (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
+                    (swap! joke-map assoc :wrong-or-right "")
+                    (swap! joke-map assoc :temp-letter nil))))
                 "")
             (do
               (swap! joke-map assoc :wrong-or-right "Wrong!")
