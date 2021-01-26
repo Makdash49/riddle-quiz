@@ -1,5 +1,5 @@
 html {
-  background: url("https://i.pinimg.com/originals/39/22/ed/3922ed9211e441286303d7f3bd678aa0.jpg") no-repeat center center fixed;
+  background: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://i.pinimg.com/originals/39/22/ed/3922ed9211e441286303d7f3bd678aa0.jpg") no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -31,10 +31,11 @@ p {
 }
 
 .joke-container {
+  border-radius: 25px;
   background-color: white;
   color: gray;
-  height: 325px;
-  width: 500px;
+  height: 350px;
+  width: 600px;
   padding: 10px 30px;
 }
 

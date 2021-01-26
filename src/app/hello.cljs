@@ -31,7 +31,7 @@
 (defn joke-display [joke-map]
   (prn "joke-map:" @joke-map)
   [:div
-    [:input {:type "button" :value "Click me for Riddles!"
+    [:input {:type "button" :value "Click Here for Riddles!"
             :on-click #(api-call joke-map)}]
     [:p (:setup (nth (@joke-map :ordered-jokes) (@joke-map :joke-counter)))]
        [lister (@joke-map :shuffled-jokes)]])
