@@ -65,7 +65,7 @@
               (go
                 (<! (timeout 1000))
                 (if (= (@joke-map :joke-counter) 3)
-                  (api-call joke-map)
+                  (swap! joke-map assoc :wrong-or-right "Well done! You cleared the riddles! Click for another set!")
                   (do
                     (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
                     (swap! joke-map assoc :wrong-or-right "")
