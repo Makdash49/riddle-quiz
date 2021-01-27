@@ -54,7 +54,7 @@
             (do
               (if (< (@joke-map :joke-counter) 3)
               (do
-                (swap! joke-map assoc :wrong-or-right "You are Correct!!")
+                (swap! joke-map assoc :wrong-or-right "You are Correct!!" :answer-status :correct)
                 (swap! joke-map assoc :letter nil)
                 (go
                   (<! (timeout 1000))
@@ -62,11 +62,11 @@
                     (swap! joke-map assoc :wrong-or-right "")
                     (swap! joke-map assoc :temp-letter nil)))
               (do
-               (swap! joke-map assoc :wrong-or-right "Well done! You cleared the riddles! Click for another set!")
+               (swap! joke-map assoc :wrong-or-right "Well done! You cleared the riddles! Click for another set!" :answer-status :cleared)
                (swap! joke-map assoc :letter nil)))
                "")
             (do
-              (swap! joke-map assoc :wrong-or-right "Wrong!")
+              (swap! joke-map assoc :wrong-or-right "Wrong!" :answer-status :wrong)
               (swap! joke-map assoc :letter nil)
               (go
                 (<! (timeout 1000))
@@ -77,7 +77,12 @@
             "")
 
 (defn wrong-or-right [joke-map]
-  [:p (@joke-map :wrong-or-right)])
+  [:p {:class
+      (let [answer-status (@joke-map :answer-status)]
+        (case answer-status
+          :correct "correct"
+          :wrong "wrong"
+          "cleared"))} (@joke-map :wrong-or-right)])
 
 (defn hello []
   ; Matt K says there may be a way to do this with shadow.cljs
