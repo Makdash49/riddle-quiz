@@ -49,7 +49,7 @@
         letters-to-nums {"A" 0 "B" 1 "C" 2 "D" 3}
         joke-index (letters-to-nums (@joke-map :letter))
         selection-id (get-in @joke-map [:shuffled-jokes joke-index :id])]
-        (when (some? selected-letter)
+        (when (and (some? selected-letter) (some? (@joke-map :jokes)))
           (if (= setup-id selection-id)
             (do
               (if (< (@joke-map :joke-counter) 3)
