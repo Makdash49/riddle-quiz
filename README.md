@@ -1,4 +1,4 @@
-Welcome to Riddle Quiz!
+### Welcome to Riddle Quiz!
 
 Please clone, and run `npm install`, then `npm start`.
 Open [http://localhost:3000](http://localhost:3000)
