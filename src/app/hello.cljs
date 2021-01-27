@@ -58,13 +58,10 @@
                 (swap! joke-map assoc :letter nil)
                 (go
                   (<! (timeout 1000))
-                  (if (= (@joke-map :joke-counter) 3)
-                    (swap! joke-map assoc :wrong-or-right "Well done! You cleared the riddles! Click for another set!")
-                    (do
-                      (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
-                      (swap! joke-map assoc :wrong-or-right "")
-                      (swap! joke-map assoc :temp-letter nil)))))
-             (do
+                    (swap! joke-map assoc :joke-counter (inc (@joke-map :joke-counter)))
+                    (swap! joke-map assoc :wrong-or-right "")
+                    (swap! joke-map assoc :temp-letter nil)))
+              (do
                (swap! joke-map assoc :wrong-or-right "Well done! You cleared the riddles! Click for another set!")
                (swap! joke-map assoc :letter nil)))
                "")
