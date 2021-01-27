@@ -43,7 +43,7 @@
    (swap! joke-map assoc :temp-letter  (str/upper-case (.-key e))))
 
 (defn answer [joke-map]
-  ; Break out each condition into its own function.
+  ; TODO Break out each condition into its own function.
   (let [setup-id (when (@joke-map :ordered-jokes)((nth (@joke-map :ordered-jokes) (@joke-map :joke-counter)) :id))
         selected-letter (@joke-map :letter)
         letters-to-nums {"A" 0 "B" 1 "C" 2 "D" 3}
@@ -82,8 +82,8 @@
           "cleared"))} (@joke-map :wrong-or-right)])
 
 (defn riddles []
-  ; There may be a way to do this with shadow.cljs
-  ; This may be creating many many listeners
+  ; TODO There may be a way to do this with shadow.cljs
+  ; TODO This may be creating many many listeners. Address.
     (js/document.addEventListener "keypress" handler)
   [:<>
     [:link {:rel "stylesheet" :href "/css/style.css"}]
