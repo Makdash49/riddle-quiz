@@ -63,18 +63,15 @@
                     (swap! joke-map assoc :temp-letter nil)))
               (do
                (swap! joke-map assoc :wrong-or-right "Well done! You cleared the riddles! Click for another set!" :answer-status :cleared)
-               (swap! joke-map assoc :letter nil)))
-               "")
+               (swap! joke-map assoc :letter nil))))
             (do
               (swap! joke-map assoc :wrong-or-right "Wrong!" :answer-status :wrong)
               (swap! joke-map assoc :letter nil)
               (go
                 (<! (timeout 1000))
                   (swap! joke-map assoc :wrong-or-right "")
-                  (swap! joke-map assoc :temp-letter nil)
-                "")
-              ))))
-            "")
+                  (swap! joke-map assoc :temp-letter nil))))))
+            nil)
 
 (defn wrong-or-right [joke-map]
   [:p {:class
@@ -95,80 +92,5 @@
       [joke-display joke-map]
       [letter-display joke-map]
       ; Does this need to be a component that displays?
-      [answer joke-map]
+      (answer joke-map)
       [wrong-or-right joke-map]]])
-
-
-    ; {
-    ;    :"jokes"{
-    ;       259{
-    ;          :id 259,
-    ;          :"type""general",
-    ;          :"setup""What is the hardest part about sky diving?",
-    ;          :"punchline""The ground."
-    ;       },
-    ;       275{
-    ;          :id 275,
-    ;          :"type""general",
-    ;          :"setup""What type of music do balloons hate?",
-    ;          :"punchline""Pop music!"
-    ;       },
-    ;       193{
-    ;          :id 193,
-    ;          :"type""general",
-    ;          :"setup""What did the Red light say to the Green light?",
-    ;          :"punchline""Don't look at me I'm changing!"
-    ;       },
-    ;       305{
-    ;          :id 305,
-    ;          :"type""general",
-    ;          :"setup""Where does Fonzie like to go for lunch?",
-    ;          :"punchline""Chick-Fil-Eyyyyyyyy."
-    ;       }
-    ;    },
-    ;    :"ordered-jokes ("{
-    ;       :id 259,
-    ;       :"type""general",
-    ;       :"setup""What is the hardest part about sky diving?",
-    ;       :"punchline""The ground."
-    ;    }{
-    ;       :id 275,
-    ;       :"type""general",
-    ;       :"setup""What type of music do balloons hate?",
-    ;       :"punchline""Pop music!"
-    ;    }{
-    ;       :id 193,
-    ;       :"type""general",
-    ;       :"setup""What did the Red light say to the Green light?",
-    ;       :"punchline""Don't look at me I'm changing!"
-    ;    }{
-    ;       :id 305,
-    ;       :"type""general",
-    ;       :"setup""Where does Fonzie like to go for lunch?",
-    ;       :"punchline""Chick-Fil-Eyyyyyyyy."
-    ;    }")",
-    ;    :"shuffled-jokes"[
-    ;       {
-    ;          :id 193,
-    ;          :"type""general",
-    ;          :"setup""What did the Red light say to the Green light?",
-    ;          :"punchline""Don't look at me I'm changing!"
-    ;       }{
-    ;          :id 275,
-    ;          :"type""general",
-    ;          :"setup""What type of music do balloons hate?",
-    ;          :"punchline""Pop music!"
-    ;       }{
-    ;          :id 305,
-    ;          :"type""general",
-    ;          :"setup""Where does Fonzie like to go for lunch?",
-    ;          :"punchline""Chick-Fil-Eyyyyyyyy."
-    ;       }{
-    ;          :id 259,
-    ;          :"type""general",
-    ;          :"setup""What is the hardest part about sky diving?",
-    ;          :"punchline""The ground."
-    ;       }
-    ;    ],
-    ;    :"letter""D"
-    ; }
