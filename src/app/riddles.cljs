@@ -1,4 +1,4 @@
-(ns app.hello
+(ns app.riddles
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs-http.client :as http]
             [cljs.core.async :refer [<!]]
@@ -81,7 +81,7 @@
           :wrong "wrong"
           "cleared"))} (@joke-map :wrong-or-right)])
 
-(defn hello []
+(defn riddles []
   ; Matt K says there may be a way to do this with shadow.cljs
   ; This may be creating many many listeners
     (js/document.addEventListener "keypress" handler)
