@@ -73,6 +73,11 @@ li {
   box-shadow: 0px 0px 10px #0066ff;
 }
 
+.click-here:hover {
+    cursor: pointer;
+    background-color: #DCDCDC;
+}
+
 .correct {
   color: green;
   text-align: center;
